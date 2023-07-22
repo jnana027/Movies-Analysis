@@ -3,5 +3,5 @@
 
 Objective:
 
-The primary aim of this data mining project is to conduct an in-depth analysis of movies database to gain valuable insights into sales performance of movies ,actor performance, identify emerging trends, and develop data-driven business strategies for improved decision-making.
+The primary aim of this data mining project is to conduct an in-depth analysis of movies database to gain valuable insights into sales performance of movies ,actor performance, identify emerging trends, and develop data-driven business strategies for improved decision-making
 

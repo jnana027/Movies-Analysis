@@ -1,0 +1,73 @@
+Summary analytics (MIN, MAX, AVG, GROUP BY)
+
+->Knowing summary analytics in SQL will enable you to perform AD HOC analysis which is an important business use case.
+
+->MAX, MIN, and AVG are the common summary analytics function of SQL.
+
+->You can define a custom column header name by using the ‘as’ clause.
+
+->GROUP BY clause will help you to create a summary of metrics such as average, count, etc.,for selected column(s).
+
+
+Examples:
+-- How many total movies do we have in our movies table?
+	SELECT COUNT(*) from movies;
+	
+-- Select highest imdb rating for bollywood movies
+	SELECT MAX(imdb_rating) from movies where industry="Bollywood";
+
+-- Select lowest imdb rating for bollywood movies
+	SELECT MIN(imdb_rating) from movies where industry="Bollywood";
+
+-- Print average rating of Marvel Studios movies
+	SELECT AVG(imdb_rating) from movies where studio="Marvel Studios";
+	SELECT ROUND(AVG(imdb_rating),2) from movies where studio="Marvel Studios";
+
+-- Print min, max, avg rating of Marvel Studios movies
+	SELECT 
+           MIN(imdb_rating) as min_rating, 
+           MAX(imdb_rating) as max_rating, 
+           ROUND(AVG(imdb_rating),2) as avg_rating
+        FROM movies 
+        WHERE studio="Marvel Studios";
+
+-- Print count of movies by industry
+	SELECT 
+           industry, count(industry) 
+        FROM movies
+        GROUP BY industry;
+
+-- Same thing but add average rating
+	SELECT 
+            industry, 
+            count(industry) as movie_count,
+            avg(imdb_rating) as avg_rating
+	FROM movies
+	GROUP BY industry;
+
+-- Count number of movies released by a given production studio
+	SELECT 
+	    studio, count(studio) as movies_count 
+        from movies WHERE studio != ''
+	GROUP BY studio
+	ORDER BY movies_count DESC;
+
+-- What is the average rating of movies per studio and also order them by average rating in descending format?
+	SELECT 
+	   studio, 
+	   count(studio) as cnt, 
+	   round(avg(imdb_rating), 1) as avg_rating 
+	from movies WHERE studio != ''
+	GROUP BY studio
+        order by avg_rating DESC;
+
+-- How many movies were released between 2015 and 2022
+select count(*) from movies where release_year between 2015 and 2022;
+
+-- Print the max and min movie release year
+select max(release_year) as Max_release_year,min(release_year) as Mix_release_year from movies;
+
+--Print a year and how many movies were released in that year starting with the latest year
+select release_year,count(release_year) count_release_year from movies  group by  release_year order by count_release_year desc ;
+
+

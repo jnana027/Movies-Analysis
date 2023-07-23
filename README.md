@@ -11,9 +11,9 @@ The Movies Dataset contains five Tables actors,financials,languages,movies_actor
 
 SQL Queries for Analysis:
 
-Various SQL queries are utilized to perform the sales analysis effectively. These queries involve aggregating sales data, calculating key performance metrics such as revenue, profit, and sales growth, and grouping data based on dimensions like time, region, or product category. The queries further facilitate the exploration of sales patterns, customer segmentation, and identifying top-performing products or regions.
+Various SQL queries are utilized to perform the Movies analysis effectively. These queries calculating key performance metrics such as all the unique industries, profit %, actor name, their birth_year and age and grouping data based on dimensions like age,industry,unit,currency. The queries further facilitate the exploration of Movies patterns, converting all unit from Billions to Millions and also currency.
 
 Key Insights and Findings:
 
-The sales analysis yields valuable and actionable insights for decision-making. It uncovers sales performance trends over time, pinpoints best-selling products or categories, and highlights underperforming regions. Analyzing customer demographics aids in identifying target segments for personalized marketing strategies. Additionally, the analysis may reveal seasonality effects, correlations between sales and external factors, and opportunities for cross-selling and upselling. With these insights, businesses can make informed decisions, optimize their operations, and drive growth and success.
+The Movies analysis yields valuable and actionable insights for decision-making. It uncovers Movies performance trends over year, pinpoints best imdb_rating,profit. Analyzing Language name  demographics aids in identifying target segments for personalized marketing strategies. Additionally, the analysis may reveal seasonality effects, correlations between movies title and external factors, and opportunities for cross-selling and upselling. With these insights, businesses can make informed decisions, optimize their operations, and drive growth and success.
 

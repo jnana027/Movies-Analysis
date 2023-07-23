@@ -1,0 +1,57 @@
+Data Retrieval on single table:
+
+->SELECT, FROM, and WHERE are the basic SQL functions.
+
+->‘*’ means all columns. Using ‘*’ after the SELECT query will select all columns of a database.
+
+->With the help of the USE function, you can indicate the query to use a particular database, especially when there are multiple databases.
+
+->The COUNT function will provide the numerical count of rows.
+
+->The DISTINCT function will help you see the unique values present in a given column.
+
+->‘%’ is a wild card search.
+
+->Use the LIKE function and ‘%’ to filter the rows based on a text value.
+
+
+Examples:
+
+--print all the movies 
+	SELECT * from movies;
+
+-- Get movie title and industry for all the movies
+	SELECT title, industry from movies;
+
+-- Print all moves from Hollywood 
+	SELECT * from movies where industry="Hollywood";
+
+-- Print all moves from Bollywood 
+	SELECT * from movies where industry="Bollywood";
+
+-- Get all the unique industries in the movies database
+	SELECT DISTINCT industry from movies;
+
+-- Select all movies that starts with THOR
+	SELECT * from movies where title LIKE 'THOR%';
+
+-- Select all movies that have 'America' word in it. That means to select all captain America movies
+	SELECT * from movies where title LIKE '%America%';
+
+-- How many hollywood movies are present in the database?
+	SELECT COUNT(*) from movies where industry="Hollywood";
+
+-- Print all  movies where we don't know the value of the studio
+	SELECT * FROM movies WHERE studio='';
+
+-- Print all movie titles and release year for all Marvel Studios movies.
+          select title,release_year from movies where studio="Marvel Studios";
+
+--Print all movies that have Avenger in their name.
+          select * from movies where title like "%Avenger%";
+
+--Print the year when the movie "The Godfather" was released.
+          select release_year from movies where title="The Godfather";
+
+-- Print all distinct movie studios in the Bollywood industry.
+          select distinct(studio) from movies where industry="Bollywood";

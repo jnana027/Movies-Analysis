@@ -1,0 +1,74 @@
+HAVING Clause:
+
+->The order of query execution in SQL is FROM
+                                  →WHERE → GROUP BY → HAVING → ORDER BY
+->GROUP BY and HAVING clauses are often used together.
+
+->The column you use in HAVING should be present in SELECT clause whereas, WHERE can usecolumns that is not present in select clause as well.
+
+Example:
+
+-- Print all the years where more than 2 movies were released
+	SELECT 
+           release_year, 
+           count(*) as movies_count
+	FROM movies    
+	GROUP BY release_year
+	HAVING movies_count>2
+	ORDER BY movies_count DESC;
+
+
+Calculated columns (IF, CASE, YEAR, CURYEAR):
+
+->You can derive new columns from the existing columns in a table.
+
+->As a data analyst, Revenue and Profit are the most common metrics that you will calculate in any
+ industry.
+
+->Currency conversion and unit conversion are important business use cases of SQL.
+
+->IF function is often used in SQL queries.
+
+->When you have more than two conditions, you need to use CASE and END functions instead of the IF function.
+
+Examples:
+
+-- Print actor name, their birth_year and age
+	SELECT 
+           name, birth_year, (YEAR(CURDATE())-birth_year) as age
+	FROM actors;
+
+-- Print profit for every movie
+	SELECT 
+	    *, 
+           (revenue-budget) as profit 
+	from financials;
+
+-- Print revenue of all movies in INR currency
+	SELECT 
+           movie_id, 
+	   revenue, 
+           currency, 
+           unit,
+           IF (currency='USD', revenue*77, revenue) as revenue_inr
+	FROM financials;
+
+-- Get all the unique units from financial table
+	select 
+	   distinct unit 
+	From financials;
+
+-- Print revenue in millions 
+	SELECT 
+           movie_id, revenue, currency, unit,
+           CASE
+              WHEN unit="Thousands" THEN revenue/1000
+              WHEN unit="Billions" THEN revenue*1000
+             ELSE revenue
+           END as revenue_mln
+	FROM financials
+
+-- 1. Print profit % for all the movies
+       select *,concat(round((revenue-budget)*100/budget,2),"%") as  "Profit %"  from financials
+
+

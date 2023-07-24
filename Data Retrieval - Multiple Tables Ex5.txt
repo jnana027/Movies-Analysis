@@ -1,0 +1,177 @@
+Data Retrieval - Multiple Tables
+
+SQL Joins (INNER, LEFT, RIGHT, FULL)
+
+->JOIN and ON clauses used together will enable you to merge two tables.
+
+->JOIN, ON & AND clause will enable you to merge two tables based on multiple columns.
+
+->There is an export button in the SQL editor through which you can download results as a .csv file.
+
+->You can assign an abbreviated letter next to the table name to shorten the query length.
+
+->There are multiple kinds of JOIN in SQL: INNER, LEFT, RIGHT, FULL, and CROSS JOIN.
+
+->By default, SQL performs an INNER JOIN.
+
+->LEFT, RIGHT, and FULL JOINS are also called OUTER JOIN.
+
+->UNION clause will enable you to perform FULL JOIN.
+
+
+Examples:
+
+-- Print all movies along with their title, budget, revenue, currency and unit.
+
+      select  
+      m.movie_id,m.title,f.budget,f.revenue,f.currency,f.unit 
+      from movies as m inner join financials as f 
+      on m.movie_id=f.movie_id; 
+
+-- Perform LEFT JOIN on above discussed scenario
+	SELECT 
+            m.movie_id, title, budget, revenue, currency, unit 
+	FROM movies as m
+	LEFT JOIN financials as f
+	ON m.movie_id=f.movie_id;
+
+-- Perform RIGHT JOIN on above discussed scenario
+	SELECT 
+            m.movie_id, title, budget, revenue, currency, unit 
+	FROM movies as m
+	RIGHT JOIN financials as f
+	ON m.movie_id=f.movie_id;
+
+-- Perform FULL JOIN using 'Union' on above two tables [movies, financials]
+	SELECT 
+            m.movie_id, title, budget, revenue, currency, unit 
+	FROM movies m
+	LEFT JOIN financials f
+	ON m.movie_id=f.movie_id
+
+	UNION
+
+	SELECT 
+            m.movie_id, title, budget, revenue, currency, unit 
+	FROM movies m
+	RIGHT JOIN financials f
+	ON m.movie_id=f.movie_id;
+
+-- Interchanging the position of Left and Right Tables
+	Select 
+	    m.movie_id, title, revenue 
+	from movies m 
+        left join financials f
+        on m.movie_id = f.movie_id;
+
+	Select 
+	    m.movie_id, title, revenue 
+	from financials f 
+        left join movies m
+        on m.movie_id = f.movie_id;
+
+-- Replacing 'ON' with 'USING' while joining conditions
+	Select 
+	   m.movie_id, title, revenue 
+	from movies m 
+        left join financials f
+	USING (movie_id);
+
+1) Show all the movies with their language names
+
+   SELECT m.title, l.name FROM movies m 
+   JOIN languages l USING (language_id)
+   
+2) Show all Telugu movie names (assuming you don't know language id for Telugu)
+  
+   SELECT title	FROM movies m 
+   LEFT JOIN languages l 
+   ON m.language_id=l.language_id
+   WHERE l.name="Telugu"
+
+3) Show language and number of movies released in that language
+   	SELECT 
+            l.name, 
+            COUNT(m.movie_id) as no_movies
+	FROM languages l
+	LEFT JOIN movies m USING (language_id)        
+	GROUP BY language_id
+	ORDER BY no_movies DESC;
+
+
+Cross Join:
+
+->Concatenation means combining two text strings together.
+
+->CONCAT clause in SQL will help you combine two text strings.
+
+->Knowing Excel will help in your understanding of SQL.
+
+->CROSS JOIN is useful when you do not have any common column between two tables.
+
+
+Examples:
+-- Print a list of final menu items along with their price for a restaurant.
+	SELECT 
+           *, 
+           CONCAT(name, " - ", variant_name) as full_name,
+           (price+variant_price) as full_price
+	FROM food_db.items
+	CROSS JOIN food_db.variants;
+
+
+
+Join more than two tables:
+
+->Whenever you get a requirement from a business stakeholder break the challenge down into simpler pieces before writing a query.
+
+->Entity Relationship Diagram (ERD) will help you to understand the relationship between the tables.
+
+->group_concat function will enable you to combine text from multiple rows into one row.
+
+Examples:
+-- Show comma separated actor names for each movie
+	SELECT 
+            m.title, group_concat(name separator " | ") as actors
+	FROM movies m
+	JOIN movie_actor ma ON m.movie_id=ma.movie_id
+	JOIN actors a ON a.actor_id=ma.actor_id
+	GROUP BY m.movie_id;
+
+-- Print actor name and all the movies they are part of
+	SELECT 
+            a.name, GROUP_CONCAT(m.title SEPARATOR ' | ') as movies
+	FROM actors a
+	JOIN movie_actor ma ON a.actor_id=ma.actor_id
+	JOIN movies m ON ma.movie_id=m.movie_id
+	GROUP BY a.actor_id;
+
+-- Print actor name and how many movies they acted in
+	SELECT 
+            a.name, 
+            GROUP_CONCAT(m.title SEPARATOR ' | ') as movies,
+            COUNT(m.title) as num_movies
+	FROM actors a
+	JOIN movie_actor ma ON a.actor_id=ma.actor_id
+	JOIN movies m ON ma.movie_id=m.movie_id
+	GROUP BY a.actor_id
+	ORDER BY num_movies DESC;
+
+1) Generate a report of all Hindi movies sorted by their revenue amount in millions. 
+Print movie name, revenue, currency, and unit
+
+	SELECT 
+		title, revenue, currency, unit, 
+			CASE 
+					WHEN unit="Thousands" THEN ROUND(revenue/1000,2)
+			WHEN unit="Billions" THEN ROUND(revenue*1000,2)
+					ELSE revenue 
+			END as revenue_mln
+	FROM movies m
+	JOIN financials f
+			ON m.movie_id=f.movie_id
+	JOIN languages l
+			ON m.language_id=l.language_id
+	WHERE l.name="Hindi"
+	ORDER BY revenue_mln DESC
+

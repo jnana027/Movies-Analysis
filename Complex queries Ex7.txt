@@ -1,0 +1,78 @@
+Complex queries:
+
+Common Table Expression (CTE)
+
+->Common Table Expression (CTE) creates a temporary table within a query.
+
+->WITH and AS clauses are used in combination to create CTE.
+
+->One can create multiple CTEs inside a query.
+
+Examples:
+-- Select all the actors whose age is greater than 70 and less than 85 [Previously, we have used sub-queries to solve this. Now we use CTE's]
+	with actors_age as 
+	   (select
+                name as actor_name,
+                year(curdate()) - birth_year as age
+            from actors
+	    )
+	select actor_name, age from actors_age where age > 70 and age < 85;
+
+
+-- Movies that produced 500% profit and their rating was less than average rating for all movies
+	with 
+	   x as 
+	      (select 
+		   *, 
+                   (revenue-budget)*100/budget as pct_profit
+               from financials),
+    	   y as 
+	      (select * from movies where imdb_rating < (select avg(imdb_rating) from movies))
+	select 
+	    x.movie_id, y.title, x.pct_profit, y.imdb_rating
+	from x
+	join y
+	on x.movie_id=y.movie_id
+	where x.pct_profit > 500;
+
+
+-- Above, can be achieved using sub-query too (But, code readability is less here compared to CTE's)
+	select 
+	   x.movie_id, y.title, x.pct_profit, y.imdb_rating
+	from ( 
+              select
+                  *, 
+                  (revenue-budget)*100/budget as pct_profit
+              from financials
+	     ) x
+	join 
+	     (select * from movies where imdb_rating < (select avg(imdb_rating) from movies)) y
+	on x.movie_id=y.movie_id
+	where pct_profit>500;
+
+
+1) select all hollowood movies released after year 2000 that made more than 500 millions $ 
+profit or more profit. Note that all hollywood movies have millions as a unit hence you don't
+need to do unit converstion. Also you can write this query without CTE as well but you should
+try to write this using CTE only
+
+	with cte as (select title, release_year, (revenue-budget) as profit
+			from movies m
+			join financials f
+			on m.movie_id=f.movie_id
+			where release_year>2000 and industry="hollywood"
+	)
+	select * from cte where profit>500
+
+
+
+without cte:
+   select 
+x.title,y.profit  
+from
+(select * from movies where industry="Hollywood" and release_year>2000 )as x 
+ join 
+(select *, (revenue-budget) as profit from
+financials )as y  
+on x.movie_id=y.movie_id
+where profit>500;
